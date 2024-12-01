@@ -8,7 +8,8 @@
 
   "Depots"
   {
-    "2213964" // Windows Depot is 4
+    // Content is depot 1
+    "3383922" // Windows Depot is 2
     {
       // Include everything generated
       "FileMapping"
