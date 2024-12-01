@@ -16,6 +16,8 @@ jobs:
     runs-on: [Windows, X64, self-hosted]
     steps:
     - uses: actions/checkout@v4
+      with:
+        lfs: true
 
     - name: Build & Cook
       uses: OrchidIsle/UE5-Build-Project@latest
