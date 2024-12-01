@@ -1,0 +1,25 @@
+"AppBuild"
+{
+  "AppID" "3383920"
+  "Desc" "v0.1.0"
+  "SetLive" "development" 
+  "ContentRoot" "C:\HGBB\Windows"
+  "BuildOutput" "Steam"
+
+  "Depots"
+  {
+    // Content is depot 1
+    "3383922" // Windows Depot is 2
+    {
+      // Include everything generated
+      "FileMapping"
+      {
+        "LocalPath" "*"
+        "DepotPath" "."
+        "recursive" 1
+      }
+      // Except local Saved data
+      "FileExclusion" "*\Saved*"
+    }
+  }
+}

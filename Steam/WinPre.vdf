@@ -1,0 +1,24 @@
+"AppBuild"
+{
+  "AppID" "3383920"
+  "Desc" "v0.1.0"
+  "SetLive" "prerelease" 
+  "ContentRoot" "C:\HGBB\WindowsNoEditor"
+  "BuildOutput" "Steam"
+
+  "Depots"
+  {
+    "2213964" // Windows Depot is 4
+    {
+      // Include everything generated
+      "FileMapping"
+      {
+        "LocalPath" "*"
+        "DepotPath" "."
+        "recursive" 1
+      }
+      // Except local Saved data
+      "FileExclusion" "*\Saved*"
+    }
+  }
+}
