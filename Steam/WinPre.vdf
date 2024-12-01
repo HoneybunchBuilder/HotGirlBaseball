@@ -3,7 +3,7 @@
   "AppID" "3383920"
   "Desc" "v0.1.0"
   "SetLive" "prerelease" 
-  "ContentRoot" "C:\HGBB\WindowsNoEditor"
+  "ContentRoot" "C:\HGBB\Win64Shipping"
   "BuildOutput" "Steam"
 
   "Depots"
