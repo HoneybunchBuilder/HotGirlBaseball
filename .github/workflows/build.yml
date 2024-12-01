@@ -50,7 +50,7 @@ jobs:
         PAK: true
         SERVER: false
         ARCHIVE: true
-        ARCHIVE_PATH: 'C:/HGBB/'
+        ARCHIVE_PATH: 'C:/HGBB/Win64Development'
         EDITOR: false
         ENCRYPT_INI: false
 
@@ -68,7 +68,7 @@ jobs:
         PAK: true
         SERVER: false
         ARCHIVE: true
-        ARCHIVE_PATH: 'C:/HGBB/'
+        ARCHIVE_PATH: 'C:/HGBB/Win64Shipping'
         EDITOR: false
         ENCRYPT_INI: false
 
