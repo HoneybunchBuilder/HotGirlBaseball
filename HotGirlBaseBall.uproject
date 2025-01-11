@@ -28,6 +28,10 @@
 		{
 			"Name": "CommonLoadingScreen",
 			"Enabled": true
+		},
+		{
+			"Name": "Mutable",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
