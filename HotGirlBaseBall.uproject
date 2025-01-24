@@ -32,6 +32,10 @@
 		{
 			"Name": "Mutable",
 			"Enabled": true
+		},
+		{
+			"Name": "RawInput",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
