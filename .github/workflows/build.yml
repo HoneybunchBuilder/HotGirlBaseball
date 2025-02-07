@@ -103,7 +103,6 @@ jobs:
       with:
         lfs: true
 
-      # Can't use OrchidIsle script because powershell doesn't want to run on macos
     - name: Build & Cook macOS Development
       shell: bash
       run: '/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac -cook
