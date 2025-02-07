@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  build:
+  build_windows:
     strategy:
       fail-fast: false
 
@@ -78,6 +78,9 @@ jobs:
     - name: Deploy Shipping to Steam pre branch
       run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/WinPre.vdf +quit
 
+  build_linux:
+    strategy:
+      fail-fast: false
     name: Linux
     runs-on: [Linux, X64, self-hosted]
     steps:
