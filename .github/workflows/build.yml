@@ -104,5 +104,4 @@ jobs:
         lfs: true
 
     - name: Build & Cook macOS Development
-      shell: bash
-      run: '/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac -cook
+      run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac -cook"
