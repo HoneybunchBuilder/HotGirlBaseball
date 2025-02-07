@@ -1,0 +1,25 @@
+"AppBuild"
+{
+  "AppID" "3383920"
+  "Desc" "v0.1.0"
+  "SetLive" "prerelease" 
+  "ContentRoot" "/Users/Shared/HGBB/MacShipping"
+  "BuildOutput" "Steam"
+
+  "Depots"
+  {
+    // Content is depot 1
+    "3383924" // Mac Depot is 4
+    {
+      // Include everything generated
+      "FileMapping"
+      {
+        "LocalPath" "*"
+        "DepotPath" "."
+        "recursive" 1
+      }
+      // Except local Saved data
+      "FileExclusion" "*\Saved*"
+    }
+  }
+}

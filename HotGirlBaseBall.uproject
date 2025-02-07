@@ -40,7 +40,11 @@
 		{
 			"Name": "CommonUI",
 			"Enabled": true
-		}
+		},
+		{
+			"Name": "TextureFormatOodle",
+			"Enabled": true
+		},
 	],
 	"TargetPlatforms": [
 		"Linux",

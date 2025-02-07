@@ -71,6 +71,24 @@ jobs:
         EDITOR: false
         ENCRYPT_INI: false
 
+    - name: Package Linux Development
+      uses: OrchidIsle/UE5-Build-Project@latest
+      with:
+        RUNUAT_PATH: 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.bat'
+        UPROJECT_PATH: ${{ github.workspace }}/HotGirlBaseBall.uproject
+        BUILD_CONFIG: Development
+        PLATFORM: Linux
+        CLEAN: false
+        COOK: true
+        STAGE: true
+        PACKAGE: true
+        PAK: true
+        SERVER: false
+        ARCHIVE: true
+        ARCHIVE_PATH: 'C:/HGBB/LinuxDevelopment'
+        EDITOR: false
+        ENCRYPT_INI: false
+
     - name: Package Windows Shipping
       uses: OrchidIsle/UE5-Build-Project@latest
       with:
@@ -86,6 +104,24 @@ jobs:
         SERVER: false
         ARCHIVE: true
         ARCHIVE_PATH: 'C:/HGBB/Win64Shipping'
+        EDITOR: false
+        ENCRYPT_INI: false
+
+    - name: Package Linux Shipping
+      uses: OrchidIsle/UE5-Build-Project@latest
+      with:
+        RUNUAT_PATH: 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.bat'
+        UPROJECT_PATH: ${{ github.workspace }}/HotGirlBaseBall.uproject
+        BUILD_CONFIG: Shipping
+        PLATFORM: Linux
+        CLEAN: false
+        COOK: true
+        STAGE: true
+        PACKAGE: true
+        PAK: true
+        SERVER: false
+        ARCHIVE: true
+        ARCHIVE_PATH: 'C:/HGBB/LinuxShipping'
         EDITOR: false
         ENCRYPT_INI: false
 

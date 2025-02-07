@@ -1,0 +1,25 @@
+"AppBuild"
+{
+  "AppID" "3383920"
+  "Desc" "v0.1.0"
+  "SetLive" "prerelease" 
+  "ContentRoot" "C:\HGBB\LinuxShipping"
+  "BuildOutput" "Steam"
+
+  "Depots"
+  {
+    // Content is depot 1
+    "3383923" // Linux Depot is 3
+    {
+      // Include everything generated
+      "FileMapping"
+      {
+        "LocalPath" "*"
+        "DepotPath" "."
+        "recursive" 1
+      }
+      // Except local Saved data
+      "FileExclusion" "*\Saved*"
+    }
+  }
+}
