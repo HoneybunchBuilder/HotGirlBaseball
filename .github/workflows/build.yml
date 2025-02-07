@@ -82,7 +82,7 @@ jobs:
     strategy:
       fail-fast: false
     name: Linux
-    runs-on: [Linux, X64, self-hosted]
+    runs-on: [Windows, X64, self-hosted]
     steps:
     - uses: actions/checkout@v4
       with:
