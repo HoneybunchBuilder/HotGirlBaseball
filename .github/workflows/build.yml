@@ -125,11 +125,18 @@ jobs:
         EDITOR: false
         ENCRYPT_INI: false
 
-    - name: Deploy Development to Steam dev branch
+    - name: Deploy Windows Development to Steam dev branch
       run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/WinDev.vdf +quit
     
-    - name: Deploy Shipping to Steam pre branch
+    - name: Deploy Linux Development to Steam dev branch
+      run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/LinDev.vdf +quit
+
+    - name: Deploy Windows Shipping to Steam pre branch
       run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/WinPre.vdf +quit
+
+    - name: Deploy Linux Shipping to Steam pre branch
+      run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/LinPre.vdf +quit
+
 
   build_apple:
     name: Apple
@@ -140,4 +147,16 @@ jobs:
         lfs: true
 
     - name: Build & Cook macOS Development
-      run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac -cook -noP4 -build -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
+      run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac -build -cook -noP4  -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
+
+    - name: Package macOS Development
+      run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac  -build -cook -package -pak -archive -archivedirectory='/Users/Shared/HGBB/MacDevelopment' -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
+
+    - name: Package macOS Shipping
+      run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Mac  -build -cook -package -pak -archive -archivedirectory='/Users/Shared/HGBB/MacShipping' -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
+
+    - name: Deploy macOS Development
+      run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/MacDev.vdf +quit
+
+    - name: Deploy macOS Shipping
+      run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/MacPre.vdf +quit
