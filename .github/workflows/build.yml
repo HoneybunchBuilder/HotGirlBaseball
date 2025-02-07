@@ -106,7 +106,7 @@ jobs:
     - name: Build & Cook macOS Development
       uses: OrchidIsle/UE5-Build-Project@latest
       with:
-        RUNUAT_PATH: 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh'
+        RUNUAT_PATH: '/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh'
         UPROJECT_PATH: ${{ github.workspace }}/HotGirlBaseBall.uproject
         BUILD_CONFIG: Development
         PLATFORM: Mac
