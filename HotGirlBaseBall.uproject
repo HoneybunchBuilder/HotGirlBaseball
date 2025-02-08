@@ -15,6 +15,10 @@
 	],
 	"Plugins": [
 		{
+			"Name": "TextureFormatOodle",
+			"Enabled": true
+		},
+		{
 			"Name": "ModelingToolsEditorMode",
 			"Enabled": true,
 			"TargetAllowList": [
@@ -41,10 +45,7 @@
 			"Name": "CommonUI",
 			"Enabled": true
 		},
-		{
-			"Name": "TextureFormatOodle",
-			"Enabled": true
-		},
+		
 	],
 	"TargetPlatforms": [
 		"Linux",

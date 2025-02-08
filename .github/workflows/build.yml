@@ -138,25 +138,21 @@ jobs:
       run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/LinPre.vdf +quit
 
 
-  build_apple:
-    name: Apple
-    runs-on: [macOS, ARM64, self-hosted]
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        lfs: true
-
-    - name: Build & Cook macOS Development
-      run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac -build -cook -noP4  -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
-
-    - name: Package macOS Development
-      run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac  -build -cook -package -pak -archive -archivedirectory='/Users/Shared/HGBB/MacDevelopment' -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
-
-    - name: Package macOS Shipping
-      run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Mac  -build -cook -package -pak -archive -archivedirectory='/Users/Shared/HGBB/MacShipping' -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
-
-    - name: Deploy macOS Development
-      run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/MacDev.vdf +quit
-
-    - name: Deploy macOS Shipping
-      run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/MacPre.vdf +quit
+  # Disabling apple build due to cook crash with mutable ; to be diagnosed
+  #build_apple:
+  #  name: Apple
+  #  runs-on: [macOS, ARM64, self-hosted]
+  #  steps:
+  #  - uses: actions/checkout@v4
+  #    with:
+  #      lfs: true
+  #  - name: Build & Cook macOS Development
+  #    run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac -build -cook -noP4  -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
+  #  - name: Package macOS Development
+  #    run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac  -build -cook -package -pak -archive -archivedirectory='/Users/Shared/HGBB/MacDevelopment' -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
+  #  - name: Package macOS Shipping
+  #    run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Mac  -build -cook -package -pak -archive -archivedirectory='/Users/Shared/HGBB/MacShipping' -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
+  #  - name: Deploy macOS Development
+  #    run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/MacDev.vdf +quit
+  #  - name: Deploy macOS Shipping
+  #    run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/MacPre.vdf +quit
