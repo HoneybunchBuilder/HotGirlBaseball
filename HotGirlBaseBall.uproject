@@ -45,7 +45,14 @@
 			"Name": "CommonUI",
 			"Enabled": true
 		},
-		
+		{
+			"Name": "Harmonix",
+			"Enabled": true
+		},
+		{
+			"Name": "MIDIDevice",
+			"Enabled": true
+		}
 	],
 	"TargetPlatforms": [
 		"Linux",
