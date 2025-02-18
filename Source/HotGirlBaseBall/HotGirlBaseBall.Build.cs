@@ -8,6 +8,6 @@ public class HotGirlBaseBall : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "MoviePlayer", "UMG" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Slate", "Engine", "InputCore", "EnhancedInput", "MoviePlayer", "UMG" });
 	}
 }
