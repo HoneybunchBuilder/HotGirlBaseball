@@ -125,6 +125,12 @@ jobs:
         EDITOR: false
         ENCRYPT_INI: false
 
+    - name: Write BugSplat Config To Windows Build
+      run: ${{ github.workspace }}/Scripts/ConfigureBugSplat.bat C:\HGBB\Win64Shipping
+
+    - name: Write BugSplat Config To Linux Build
+      run: ${{ github.workspace }}/Scripts/ConfigureBugSplat.bat C:\HGBB\LinuxShipping
+
     - name: Upload Windows Debug Symbols to BugSplat
       working-directory: C:\HGBB\Win64Shipping
       run: ${{ github.workspace }}/Plugins/BugSplat/Source/ThirdParty/SymUploader/symbol-upload-windows.exe -i ${{ secrets.BUGSPLAT_CLIENTID }} -s ${{ secrets.BUGSPLAT_CLIENTSECRET }} -b hotgirlbaseball -a HotGirlBaseball -v 0.1.0 -f "**/*.{pdb,exe,dll}"
