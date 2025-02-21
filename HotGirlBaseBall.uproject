@@ -15,6 +15,11 @@
 	],
 	"Plugins": [
 		{
+			"Name": "BugSplat",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/f26128f947f5471fa7d24184545b3d09"
+		},
+		{
 			"Name": "TextureFormatOodle",
 			"Enabled": true
 		},

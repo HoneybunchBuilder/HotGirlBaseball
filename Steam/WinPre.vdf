@@ -20,6 +20,8 @@
       }
       // Except local Saved data
       "FileExclusion" "*\Saved*"
+      // And Symbols
+      "FileExclusion" "*.pdb"
     }
   }
 }
