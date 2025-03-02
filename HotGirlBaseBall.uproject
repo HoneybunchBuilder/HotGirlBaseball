@@ -65,6 +65,7 @@
 		"LinuxArm64",
 		"Mac",
 		"Windows",
-		"Android"
+		"Android",
+		"IOS"
 	]
 }
