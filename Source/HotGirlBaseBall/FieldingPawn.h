@@ -13,7 +13,7 @@ class HOTGIRLBASEBALL_API AFieldingPawn : public APlayerPawn
 
 public:
 	// Sets default values for this pawn's properties
-	AFieldingPawn(const FObjectInitializer& ObjectInitializer);
+	AFieldingPawn();
 
 protected:
 	// Called when the game starts or when spawned

@@ -15,71 +15,74 @@ class HOTGIRLBASEBALL_API APlayerPawn : public APawn
 	GENERATED_BODY()
 
 public:
-	APlayerPawn(const FObjectInitializer& ObjectInitializer);
+	APlayerPawn();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UCapsuleComponent> Capsule;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> HeadMesh;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UCustomizableSkeletalComponent> CustomHead;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> HairBackMesh;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UCustomizableSkeletalComponent> CustomHairBack;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> HairFringeMesh;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UCustomizableSkeletalComponent> CustomHairFringe;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> HairSidesShortMesh;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UCustomizableSkeletalComponent> CustomHairSidesShort;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> HairSidesLongMesh;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UCustomizableSkeletalComponent> CustomHairSidesLong;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> HairPonytailMesh;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UCustomizableSkeletalComponent> CustomHairPonytail;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> HairPigtailsMesh;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UCustomizableSkeletalComponent> CustomHairPigtails;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> BodyMesh;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UCustomizableSkeletalComponent> CustomBody;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<UCustomizableObjectInstance> CustomObject;
 
 protected:
+	// Hair meshes will attach to a socket of this name on the Head mesh
 	const FName HairSocketName = FName(TEXT("head"));
 
+	// Helper array of all the customizable components
 	TArray<TObjectPtr<UCustomizableSkeletalComponent>> CustomPieces;
 	
 	virtual void PostInitializeComponents() override;
 
 	virtual void BeginPlay() override;
 
+	// Must be called by blueprint BeginPlay & Constructor to work properly
 	UFUNCTION(BlueprintCallable)
 	virtual void ApplyCustomObjectInstance();
 
