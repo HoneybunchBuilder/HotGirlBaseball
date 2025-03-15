@@ -3,7 +3,7 @@
   "AppID" "3383920"
   "Desc" "v0.1.0"
   "SetLive" "development" 
-  "ContentRoot" "C:\HGBB\LinuxDevelopment"
+  "ContentRoot" "/opt/hgbb/LinuxDevelopment"
   "BuildOutput" "Steam"
 
   "Depots"
