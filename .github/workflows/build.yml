@@ -8,10 +8,7 @@ on:
 
 jobs:
 
-  build_pc:
-    strategy:
-      fail-fast: false
-
+  build_windows:
     name: Windows
     runs-on: [Windows, X64, self-hosted]
     steps:
@@ -70,67 +67,68 @@ jobs:
     - name: Deploy Windows Shipping to Steam pre branch
       run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/WinPre.vdf +quit
 
-  name: Linux
-  runs-on: [Linux, X64, self-hosted]
-  steps:
-  - uses: actions/checkout@v4
-    with:
-      lfs: true
+  build_linux:
+    name: Linux
+    runs-on: [Linux, X64, self-hosted]
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        lfs: true
 
-  - name: Build & Cook Linux Development
-    uses: OrchidIsle/UE5-Build-Project@latest
-    with:
-      RUNUAT_PATH: '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh'
-      UPROJECT_PATH: ${{ github.workspace }}/HotGirlBaseBall.uproject
-      BUILD_CONFIG: Development
-      PLATFORM: Linux
-      CLEAN: false
-      COOK: true
-      STAGE: false
-      PACKAGE: false
-      PAK: false
-      SERVER: false
-      ARCHIVE: false
-      EDITOR: false
-      ENCRYPT_INI: false
+    - name: Build & Cook Linux Development
+      uses: OrchidIsle/UE5-Build-Project@latest
+      with:
+        RUNUAT_PATH: '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh'
+        UPROJECT_PATH: ${{ github.workspace }}/HotGirlBaseBall.uproject
+        BUILD_CONFIG: Development
+        PLATFORM: Linux
+        CLEAN: false
+        COOK: true
+        STAGE: false
+        PACKAGE: false
+        PAK: false
+        SERVER: false
+        ARCHIVE: false
+        EDITOR: false
+        ENCRYPT_INI: false
 
-  - name: Package Linux Development
-    uses: OrchidIsle/UE5-Build-Project@latest
-    with:
-      RUNUAT_PATH: '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh'
-      UPROJECT_PATH: ${{ github.workspace }}/HotGirlBaseBall.uproject
-      BUILD_CONFIG: Development
-      PLATFORM: Linux
-      CLEAN: false
-      COOK: true
-      STAGE: true
-      PACKAGE: true
-      PAK: true
-      SERVER: false
-      ARCHIVE: true
-      ARCHIVE_PATH: '/opt/hgbb/LinuxDevelopment'
-      EDITOR: false
-      ENCRYPT_INI: false
+    - name: Package Linux Development
+      uses: OrchidIsle/UE5-Build-Project@latest
+      with:
+        RUNUAT_PATH: '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh'
+        UPROJECT_PATH: ${{ github.workspace }}/HotGirlBaseBall.uproject
+        BUILD_CONFIG: Development
+        PLATFORM: Linux
+        CLEAN: false
+        COOK: true
+        STAGE: true
+        PACKAGE: true
+        PAK: true
+        SERVER: false
+        ARCHIVE: true
+        ARCHIVE_PATH: '/opt/hgbb/LinuxDevelopment'
+        EDITOR: false
+        ENCRYPT_INI: false
 
-  - name: Package Linux Shipping
-    run: "sh '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Linux -CrashReporter -build -cook -stage -package -pak -archive -archivedirectory='C:/HGBB/LinuxShipping' -noP4 -unattended -utf8output -prereqs"
+    - name: Package Linux Shipping
+      run: "sh '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Linux -CrashReporter -build -cook -stage -package -pak -archive -archivedirectory='C:/HGBB/LinuxShipping' -noP4 -unattended -utf8output -prereqs"
 
-  - name: Write BugSplat Config To Linux Build
-    run: ${{ github.workspace }}/Scripts/ConfigureBugSplat.sh /opt/hgbb/LinuxShipping
+    - name: Write BugSplat Config To Linux Build
+      run: ${{ github.workspace }}/Scripts/ConfigureBugSplat.sh /opt/hgbb/LinuxShipping
 
-  - name: Upload Linux Debug Library Symbols to BugSplat
-    working-directory: /opt/hgbb/LinuxShipping/
-    run: ${{ github.workspace }}/Plugins/BugSplat/Source/ThirdParty/SymUploader/symbol-upload-linux -i ${{ secrets.BUGSPLAT_CLIENTID }} -s ${{ secrets.BUGSPLAT_CLIENTSECRET }} -b hotgirlbaseball -a HotGirlBaseball -v 0.1.0 -f "**/*.{so,0,debug,sym}"
+    - name: Upload Linux Debug Library Symbols to BugSplat
+      working-directory: /opt/hgbb/LinuxShipping/
+      run: ${{ github.workspace }}/Plugins/BugSplat/Source/ThirdParty/SymUploader/symbol-upload-linux -i ${{ secrets.BUGSPLAT_CLIENTID }} -s ${{ secrets.BUGSPLAT_CLIENTSECRET }} -b hotgirlbaseball -a HotGirlBaseball -v 0.1.0 -f "**/*.{so,0,debug,sym}"
 
-  - name: Upload Linux Debug Executable Symbols to BugSplat
-    working-directory: /opt/hgbb/LinuxShipping
-    run: ${{ github.workspace }}/Plugins/BugSplat/Source/ThirdParty/SymUploader/symbol-upload-linux -i ${{ secrets.BUGSPLAT_CLIENTID }} -s ${{ secrets.BUGSPLAT_CLIENTSECRET }} -b hotgirlbaseball -a HotGirlBaseball -v 0.1.0 -f "**/HotGirlBaseball*"
+    - name: Upload Linux Debug Executable Symbols to BugSplat
+      working-directory: /opt/hgbb/LinuxShipping
+      run: ${{ github.workspace }}/Plugins/BugSplat/Source/ThirdParty/SymUploader/symbol-upload-linux -i ${{ secrets.BUGSPLAT_CLIENTID }} -s ${{ secrets.BUGSPLAT_CLIENTSECRET }} -b hotgirlbaseball -a HotGirlBaseball -v 0.1.0 -f "**/HotGirlBaseball*"
 
-  - name: Deploy Linux Development to Steam dev branch
-    run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/LinDev.vdf +quit
+    - name: Deploy Linux Development to Steam dev branch
+      run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/LinDev.vdf +quit
 
-  - name: Deploy Linux Shipping to Steam pre branch
-    run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/LinPre.vdf +quit
+    - name: Deploy Linux Shipping to Steam pre branch
+      run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/LinPre.vdf +quit
 
   # Disabling apple build due to cook crash with mutable ; to be diagnosed
   #build_apple:
