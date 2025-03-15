@@ -17,39 +17,10 @@ jobs:
         lfs: true
 
     - name: Build & Cook Windows Development
-      uses: OrchidIsle/UE5-Build-Project@latest
-      with:
-        RUNUAT_PATH: 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.bat'
-        UPROJECT_PATH: ${{ github.workspace }}/HotGirlBaseBall.uproject
-        BUILD_CONFIG: Development
-        PLATFORM: Win64
-        CLEAN: false
-        COOK: true
-        STAGE: false
-        PACKAGE: false
-        PAK: false
-        SERVER: false
-        ARCHIVE: false
-        EDITOR: true
-        ENCRYPT_INI: false
+      run: "cmd /c 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.bat' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Win64 -build -cook -noP4 -unattended -utf8output -prereqs"
 
     - name: Package Windows Development
-      uses: OrchidIsle/UE5-Build-Project@latest
-      with:
-        RUNUAT_PATH: 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.bat'
-        UPROJECT_PATH: ${{ github.workspace }}/HotGirlBaseBall.uproject
-        BUILD_CONFIG: Development
-        PLATFORM: Win64
-        CLEAN: false
-        COOK: true
-        STAGE: true
-        PACKAGE: true
-        PAK: true
-        SERVER: false
-        ARCHIVE: true
-        ARCHIVE_PATH: 'C:/HGBB/Win64Development'
-        EDITOR: false
-        ENCRYPT_INI: false
+      run: "cmd /c 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.bat' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Win64 -build -cook -stage -package -pak -archive -archivedirectory='C:/HGBB/Win64Development' -noP4 -unattended -utf8output -prereqs"
 
     - name: Package Windows Shipping
       run: "cmd /c 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.bat' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Win64 -CrashReporter -build -cook -stage -package -pak -archive -archivedirectory='C:/HGBB/Win64Shipping' -noP4 -unattended -utf8output -prereqs"
