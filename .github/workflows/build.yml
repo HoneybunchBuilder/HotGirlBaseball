@@ -64,7 +64,7 @@ jobs:
 
     - name: Upload Linux Debug Executable Symbols to BugSplat
       working-directory: /opt/hgbb/LinuxShipping
-      run: ${{ github.workspace }}/Plugins/BugSplat/Source/ThirdParty/SymUploader/symbol-upload-linux -i ${{ secrets.BUGSPLAT_CLIENTID }} -s ${{ secrets.BUGSPLAT_CLIENTSECRET }} -b hotgirlbaseball -a HotGirlBaseball -v 0.1.0 -f "**/HotGirlBaseball*"
+      run: ${{ github.workspace }}/Plugins/BugSplat/Source/ThirdParty/SymUploader/symbol-upload-linux -i ${{ secrets.BUGSPLAT_CLIENTID }} -s ${{ secrets.BUGSPLAT_CLIENTSECRET }} -b hotgirlbaseball -a HotGirlBaseball -v 0.1.0 -f "**/HotGirlBaseBall*"
 
     - name: Deploy Linux Development to Steam dev branch
       run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/LinDev.vdf +quit
