@@ -76,42 +76,13 @@ jobs:
         lfs: true
 
     - name: Build & Cook Linux Development
-      uses: OrchidIsle/UE5-Build-Project@latest
-      with:
-        RUNUAT_PATH: '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh'
-        UPROJECT_PATH: ${{ github.workspace }}/HotGirlBaseBall.uproject
-        BUILD_CONFIG: Development
-        PLATFORM: Linux
-        CLEAN: false
-        COOK: true
-        STAGE: false
-        PACKAGE: false
-        PAK: false
-        SERVER: false
-        ARCHIVE: false
-        EDITOR: false
-        ENCRYPT_INI: false
+      run: "sh '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Linux -build -cook -noP4 -unattended -utf8output -prereqs"
 
     - name: Package Linux Development
-      uses: OrchidIsle/UE5-Build-Project@latest
-      with:
-        RUNUAT_PATH: '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh'
-        UPROJECT_PATH: ${{ github.workspace }}/HotGirlBaseBall.uproject
-        BUILD_CONFIG: Development
-        PLATFORM: Linux
-        CLEAN: false
-        COOK: true
-        STAGE: true
-        PACKAGE: true
-        PAK: true
-        SERVER: false
-        ARCHIVE: true
-        ARCHIVE_PATH: '/opt/hgbb/LinuxDevelopment'
-        EDITOR: false
-        ENCRYPT_INI: false
+      run: "sh '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Linux -CrashReporter -build -cook -stage -package -pak -archive -archivedirectory='/opt/hgbb/LinuxDevelopment' -noP4 -unattended -utf8output -prereqs"
 
     - name: Package Linux Shipping
-      run: "sh '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Linux -CrashReporter -build -cook -stage -package -pak -archive -archivedirectory='C:/HGBB/LinuxShipping' -noP4 -unattended -utf8output -prereqs"
+      run: "sh '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Linux -CrashReporter -build -cook -stage -package -pak -archive -archivedirectory='/opt/hgbb/LinuxShipping' -noP4 -unattended -utf8output -prereqs"
 
     - name: Write BugSplat Config To Linux Build
       run: ${{ github.workspace }}/Scripts/ConfigureBugSplat.sh /opt/hgbb/LinuxShipping
@@ -139,7 +110,7 @@ jobs:
   #    with:
   #      lfs: true
   #  - name: Build & Cook macOS Development
-  #    run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac -build -cook -noP4  -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
+  #    run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac -build -cook -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
   #  - name: Package macOS Development
   #    run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac  -build -cook -package -pak -archive -archivedirectory='/Users/Shared/HGBB/MacDevelopment' -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
   #  - name: Package macOS Shipping
