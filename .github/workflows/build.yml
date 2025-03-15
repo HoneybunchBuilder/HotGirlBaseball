@@ -56,7 +56,7 @@ jobs:
       run: "sh '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Linux -CrashReporter -build -cook -stage -package -pak -archive -archivedirectory='/opt/hgbb/LinuxShipping' -noP4 -unattended -utf8output -prereqs"
 
     - name: Write BugSplat Config To Linux Build
-      run: ${{ github.workspace }}/Scripts/ConfigureBugSplat.sh /opt/hgbb/LinuxShipping
+      run: "sh '${{ github.workspace }}/Scripts/ConfigureBugSplat.sh' /opt/hgbb/LinuxShipping"
 
     - name: Upload Linux Debug Library Symbols to BugSplat
       working-directory: /opt/hgbb/LinuxShipping/
