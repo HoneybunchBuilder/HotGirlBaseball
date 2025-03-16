@@ -1,2 +1,2 @@
-# HotGirlBaseBall
+# HotGirlBaseball
 

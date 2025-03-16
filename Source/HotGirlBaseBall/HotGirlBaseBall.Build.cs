@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class HotGirlBaseBall : ModuleRules
+public class HotGirlBaseball : ModuleRules
 {
-    public HotGirlBaseBall(ReadOnlyTargetRules Target) : base(Target)
+    public HotGirlBaseball(ReadOnlyTargetRules Target) : base(Target)
     {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 

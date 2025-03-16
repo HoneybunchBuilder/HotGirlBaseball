@@ -17,13 +17,13 @@ jobs:
         lfs: true
 
     - name: Build & Cook Windows Development
-      run: "cmd /c 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.bat' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Win64 -build -cook -noP4 -unattended -utf8output -prereqs"
+      run: "cmd /c 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.bat' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseball.uproject' -clientconfig=Development -serverconfig=Development -platform=Win64 -build -cook -noP4 -unattended -utf8output -prereqs"
 
     - name: Package Windows Development
-      run: "cmd /c 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.bat' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Win64 -build -cook -stage -package -pak -archive -archivedirectory='C:/HGBB/Win64Development' -noP4 -unattended -utf8output -prereqs"
+      run: "cmd /c 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.bat' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseball.uproject' -clientconfig=Development -serverconfig=Development -platform=Win64 -build -cook -stage -package -pak -archive -archivedirectory='C:/HGBB/Win64Development' -noP4 -unattended -utf8output -prereqs"
 
     - name: Package Windows Shipping
-      run: "cmd /c 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.bat' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Win64 -CrashReporter -build -cook -stage -package -pak -archive -archivedirectory='C:/HGBB/Win64Shipping' -noP4 -unattended -utf8output -prereqs"
+      run: "cmd /c 'C:/Program Files/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.bat' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseball.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Win64 -CrashReporter -build -cook -stage -package -pak -archive -archivedirectory='C:/HGBB/Win64Shipping' -noP4 -unattended -utf8output -prereqs"
 
     - name: Write BugSplat Config To Windows Build
       run: ${{ github.workspace }}/Scripts/ConfigureBugSplat.bat C:\HGBB\Win64Shipping
@@ -47,13 +47,13 @@ jobs:
         lfs: true
 
     - name: Build & Cook Linux Development
-      run: "sh '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Linux -build -cook -noP4 -unattended -utf8output -prereqs"
+      run: "sh '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseball.uproject' -clientconfig=Development -serverconfig=Development -platform=Linux -build -cook -noP4 -unattended -utf8output -prereqs"
 
     - name: Package Linux Development
-      run: "sh '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Linux -CrashReporter -build -cook -stage -package -pak -archive -archivedirectory='/opt/hgbb/LinuxDevelopment' -noP4 -unattended -utf8output -prereqs"
+      run: "sh '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseball.uproject' -clientconfig=Development -serverconfig=Development -platform=Linux -CrashReporter -build -cook -stage -package -pak -archive -archivedirectory='/opt/hgbb/LinuxDevelopment' -noP4 -unattended -utf8output -prereqs"
 
     - name: Package Linux Shipping
-      run: "sh '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Linux -CrashReporter -build -cook -stage -package -pak -archive -archivedirectory='/opt/hgbb/LinuxShipping' -noP4 -unattended -utf8output -prereqs"
+      run: "sh '/opt/ue5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseball.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Linux -CrashReporter -build -cook -stage -package -pak -archive -archivedirectory='/opt/hgbb/LinuxShipping' -noP4 -unattended -utf8output -prereqs"
 
     - name: Write BugSplat Config To Linux Build
       run: "sh '${{ github.workspace }}/Scripts/ConfigureBugSplat.sh' /opt/hgbb/LinuxShipping"
@@ -64,7 +64,7 @@ jobs:
 
     - name: Upload Linux Debug Executable Symbols to BugSplat
       working-directory: /opt/hgbb/LinuxShipping
-      run: ${{ github.workspace }}/Plugins/BugSplat/Source/ThirdParty/SymUploader/symbol-upload-linux -i ${{ secrets.BUGSPLAT_CLIENTID }} -s ${{ secrets.BUGSPLAT_CLIENTSECRET }} -b hotgirlbaseball -a HotGirlBaseball -v 0.1.0 -f "**/HotGirlBaseBall*"
+      run: ${{ github.workspace }}/Plugins/BugSplat/Source/ThirdParty/SymUploader/symbol-upload-linux -i ${{ secrets.BUGSPLAT_CLIENTID }} -s ${{ secrets.BUGSPLAT_CLIENTSECRET }} -b hotgirlbaseball -a HotGirlBaseball -v 0.1.0 -f "**/HotGirlBaseball*"
 
     - name: Deploy Linux Development to Steam dev branch
       run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/LinDev.vdf +quit
@@ -81,11 +81,11 @@ jobs:
   #    with:
   #      lfs: true
   #  - name: Build & Cook macOS Development
-  #    run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac -build -cook -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
+  #    run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseball.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac -build -cook -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
   #  - name: Package macOS Development
-  #    run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac  -build -cook -package -pak -archive -archivedirectory='/Users/Shared/HGBB/MacDevelopment' -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
+  #    run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseball.uproject' -clientconfig=Development -serverconfig=Development -platform=Mac  -build -cook -package -pak -archive -archivedirectory='/Users/Shared/HGBB/MacDevelopment' -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
   #  - name: Package macOS Shipping
-  #    run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseBall.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Mac  -build -cook -package -pak -archive -archivedirectory='/Users/Shared/HGBB/MacShipping' -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
+  #    run: "'/Users/Shared/Epic Games/UE_5.5/Engine/Build/BatchFiles/RunUAT.sh' BuildCookRun -project='${{ github.workspace }}/HotGirlBaseball.uproject' -clientconfig=Shipping -serverconfig=Shipping -platform=Mac  -build -cook -package -pak -archive -archivedirectory='/Users/Shared/HGBB/MacShipping' -noP4 -unattended -utf8output -prereqs -specifiedarchitecture=arm64+x86_64"
   #  - name: Deploy macOS Development
   #    run: steamcmd +login ${{ secrets.STEAM_USERNAME }} +run_app_build ${{ github.workspace }}/Steam/MacDev.vdf +quit
   #  - name: Deploy macOS Shipping

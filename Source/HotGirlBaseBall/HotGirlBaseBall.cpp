@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "HotGirlBaseBall.h"
+#include "HotGirlBaseball.h"
 #include "Modules/ModuleManager.h"
 
-IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, HotGirlBaseBall, "HotGirlBaseBall" );
- 
+IMPLEMENT_PRIMARY_GAME_MODULE(FDefaultGameModuleImpl, HotGirlBaseball, "HotGirlBaseball");
