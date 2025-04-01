@@ -3,11 +3,6 @@
 
 #include "PlayerPawn.h"
 
-/*
-	Current problems:
-	Can't seem to get hair to attach properly. When attaching to a socket in blueprint the object is moved to the socket position
-*/
-
 APlayerPawn::APlayerPawn()
 {
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
@@ -105,9 +100,20 @@ APlayerPawn::APlayerPawn()
 	CustomPieces.Add(CustomHairPigtails);
 	CustomPieces.Add(CustomBody);
 
+	// Set up some less dramatic actor components
+	MovementComponent = CreateDefaultSubobject<UHGBBMovement>(TEXT("HGBBMovement"));
+	FloatingMovement = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingMovementBase"));
+
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Try to apply instance while we're here but this will need to be called by the BP constructor for proper behavior
+	ApplyCustomObjectInstance();
+}
+
+void APlayerPawn::SetPlayerDisplay(TObjectPtr<UCustomizableObjectInstance> InCustomInstance, FHGBBTeam InTeam)
+{
+	CustomObject = InCustomInstance;
+	Team = InTeam;
 	ApplyCustomObjectInstance();
 }
 
@@ -136,12 +142,23 @@ void APlayerPawn::ApplyCustomObjectInstance()
 	{
 		Piece->SetCustomizableObjectInstance(CustomObject);
 	}
+
+	// Apply team colors
+	CustomObject->SetColorParameterSelectedOption(TEXT("TeamColor1"), Team.PrimaryColor);
+	CustomObject->SetColorParameterSelectedOption(TEXT("TeamColor2"), Team.SecondaryColor);
+	CustomObject->SetColorParameterSelectedOption(TEXT("TeamColor3"), Team.TertiaryColor);
+
 	CustomObject->UpdateSkeletalMeshAsync(false, true);
+}
+
+void APlayerPawn::TickLockToFloor()
+{
 }
 
 void APlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	TickLockToFloor();
 }
 
 void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
