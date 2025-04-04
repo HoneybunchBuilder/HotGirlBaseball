@@ -6,6 +6,9 @@
 
 #include "HGBBTypes.generated.h"
 
+/*
+    Used to distinguish which base an actor is referencing
+*/
 UENUM(BlueprintType)
 enum class EBase : uint8 {
     Home = 0 UMETA(DisplayName = "Home"),
@@ -14,6 +17,9 @@ enum class EBase : uint8 {
     Third = 3 UMETA(DisplayName = "Third"),
 };
 
+/*
+    The defensive positions on the baseball field
+*/
 UENUM(BlueprintType)
 enum class EFieldingPosition : uint8 {
     Pitcher = 0 UMETA(DisplayName = "Pitcher"),
@@ -33,6 +39,9 @@ enum class EHandedness : uint8 {
     LeftHanded = 1 UMETA(DisplayName = "Left Handed"),
 };
 
+/*
+    The course arc of a hit
+*/
 UENUM(BlueprintType)
 enum class EHitArc : uint8 {
     GroundBall = 0 UMETA(DisplayName = "Ground Ball"),
@@ -40,6 +49,9 @@ enum class EHitArc : uint8 {
     PopFly = 2 UMETA(DisplayName = "Pop Fly"),
 };
 
+/*
+    The course direction of a hit
+*/
 UENUM(BlueprintType)
 enum class EHitDirection : uint8 {
     Left = 0 UMETA(DisplayName = "Left"),
@@ -49,9 +61,26 @@ enum class EHitDirection : uint8 {
     HomeRun = 4 UMETA(DisplayName = "Home Run"),
 };
 
+/*
+    Used distinguish which team an actor may belong to
+*/
 UENUM(BlueprintType)
 enum class ETeamType : uint8 {
     Home = 0 UMETA(DisplayName = "Home"),
     Away = 1 UMETA(DisplayName = "Away"),
+};
+
+/*
+    A simple description of a hit use for coarse planning and reaction
+*/
+USTRUCT(BlueprintType)
+struct FHitType {
+    GENERATED_BODY()
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+    EHitArc Arc;
+
+    UPROPERTY(BlueprintReadWrite, EditAnywhere)
+    EHitDirection Direction;
 };
 
