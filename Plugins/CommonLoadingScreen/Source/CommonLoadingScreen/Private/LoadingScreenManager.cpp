@@ -257,7 +257,7 @@ bool ULoadingScreenManager::CheckForAnyNeedToShowLoadingScreen()
 	// Start out with 'unknown' reason in case someone forgets to put a reason when changing this in the future.
 	DebugReasonForShowingOrHidingLoadingScreen = TEXT("Reason for Showing/Hiding LoadingScreen is unknown!");
 
-	const UGameInstance* LocalGameInstance = GetGameInstance();
+	UGameInstance* LocalGameInstance = GetGameInstance();
 
 	if (LoadingScreenCVars::ForceLoadingScreenVisible)
 	{
@@ -319,6 +319,12 @@ bool ULoadingScreenManager::CheckForAnyNeedToShowLoadingScreen()
 	{
 		// Show a loading screen during seamless travel
 		DebugReasonForShowingOrHidingLoadingScreen = FString(TEXT("We are in seamless travel"));
+		return true;
+	}
+
+	// Ask the game instance if it needs a loading screen	
+	if (ILoadingProcessInterface::ShouldShowLoadingScreen(LocalGameInstance, /*out*/ DebugReasonForShowingOrHidingLoadingScreen))
+	{
 		return true;
 	}
 

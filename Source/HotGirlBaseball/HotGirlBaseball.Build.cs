@@ -18,8 +18,11 @@ public class HotGirlBaseball : ModuleRules
             "MoviePlayer", 
             "AIModule", 
             "UMG", 
+            "RenderCore",
             "CustomizableObject", 
             "GameplayAbilities",
+            "CommonLoadingScreen",
+            "CommonStartupLoadingScreen"
         });
     }
 }
