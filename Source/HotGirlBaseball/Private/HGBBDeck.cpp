@@ -4,42 +4,44 @@
 #include "HGBBDeck.h"
 #include "Algo/RandomShuffle.h"
 
-UHGBBDeck::UHGBBDeck(const FHGBBDeckDesc& Descriptor)
-	: DisplayName(Descriptor.DisplayName)
-	, Icon(Descriptor.Icon)
+void UBattingDeck::InitFromPreset(const UBattingDeckPreset& Preset)
 {
-}
-
-UBattingDeck::UBattingDeck(const FBattingDeckDesc& Descriptor)
-	: UHGBBDeck(Descriptor)
-{
-	for (const auto& CardType : Descriptor.CardTypes)
+	DisplayName = Preset.DisplayName;
+	Icon = Preset.Icon;
+	for (const auto& It : Preset.BattingCards)
 	{
-		auto Type = CardType.Key;
-		int32 Num = CardType.Value;
-		for (int32 CardIndex = 0; CardIndex < Num; ++CardIndex)
+		const int32 NumCardType = It.Value;
+		for (int32 Index = 0; Index < NumCardType; ++Index)
 		{
-			auto Card = NewObject<UBattingCard>(this, Type);
+			auto Card = NewObject<UBattingCard>(this, It.Key);
 			Cards.Add(Card);
 		}
 	}
+	Shuffle();
+}
 
+void UBattingDeck::Shuffle()
+{
 	Algo::RandomShuffle(Cards);
 }
 
-UFieldingDeck::UFieldingDeck(const FFieldingDeckDesc& Descriptor)
-	: UHGBBDeck(Descriptor)
+void UFieldingDeck::InitFromPreset(const UFieldingDeckPreset& Preset)
 {
-	for (const auto& CardType : Descriptor.CardTypes)
+	DisplayName = Preset.DisplayName;
+	Icon = Preset.Icon;
+	for (const auto& It : Preset.FieldingCards)
 	{
-		auto Type = CardType.Key;
-		int32 Num = CardType.Value;
-		for (int32 CardIndex = 0; CardIndex < Num; ++CardIndex)
+		const int32 NumCardType = It.Value;
+		for (int32 Index = 0; Index < NumCardType; ++Index)
 		{
-			auto Card = NewObject<UFieldingCard>(this, Type);
+			auto Card = NewObject<UFieldingCard>(this, It.Key);
 			Cards.Add(Card);
 		}
 	}
+	Shuffle();
+}
 
+void UFieldingDeck::Shuffle()
+{
 	Algo::RandomShuffle(Cards);
 }

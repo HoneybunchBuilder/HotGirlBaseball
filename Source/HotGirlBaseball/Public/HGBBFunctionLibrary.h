@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Components/Widget.h"
 #include "HGBBTypes.h"
+#include "HGBBDeck.h"
 
 #include "HGBBFunctionLibrary.generated.h"
 

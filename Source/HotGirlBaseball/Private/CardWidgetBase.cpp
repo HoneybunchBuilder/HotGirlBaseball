@@ -3,5 +3,5 @@
 
 #include "CardWidgetBase.h"
 
-void UCardWidgetBase::ApplyCardStyle_Implementation(const FHGBBCardStyle& Style)
+void UCardWidgetBase::ApplyCardStyle_Implementation(const UHGBBCard* Card)
 {}

@@ -15,5 +15,5 @@ class HOTGIRLBASEBALL_API UCardWidgetBase : public UUserWidget
 	
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void ApplyCardStyle(const FHGBBCardStyle& Style);
+	void ApplyCardStyle(const UHGBBCard* Card);
 };

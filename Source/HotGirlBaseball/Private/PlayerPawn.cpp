@@ -110,9 +110,9 @@ APlayerPawn::APlayerPawn()
 	ApplyCustomObjectInstance();
 }
 
-void APlayerPawn::SetPlayerDisplay(TObjectPtr<UCustomizableObjectInstance> InCustomInstance, FHGBBTeam InTeam)
+void APlayerPawn::SetPlayer(TWeakObjectPtr<UHGBBPlayer> InPlayer, TWeakObjectPtr<UHGBBTeam> InTeam)
 {
-	CustomObject = InCustomInstance;
+	Player = InPlayer;
 	Team = InTeam;
 	ApplyCustomObjectInstance();
 }
@@ -133,22 +133,22 @@ void APlayerPawn::BeginPlay()
 
 void APlayerPawn::ApplyCustomObjectInstance()
 {
-	if (CustomObject == nullptr) // Not sure when in the init process this can happen but this can be null and that will crash deep in mutable later on
+	if (Player == nullptr) // Not sure when in the init process this can happen but this can be null and that will crash deep in mutable later on
 	{
 		return;
 	}
 
 	for(auto Piece : CustomPieces)
 	{
-		Piece->SetCustomizableObjectInstance(CustomObject);
+		Piece->SetCustomizableObjectInstance(Player->CharacterInstance);
 	}
 
 	// Apply team colors
-	CustomObject->SetColorParameterSelectedOption(TEXT("TeamColor1"), Team.PrimaryColor);
-	CustomObject->SetColorParameterSelectedOption(TEXT("TeamColor2"), Team.SecondaryColor);
-	CustomObject->SetColorParameterSelectedOption(TEXT("TeamColor3"), Team.TertiaryColor);
+	Player->CharacterInstance->SetColorParameterSelectedOption(TEXT("TeamColor1"), Team->PrimaryColor);
+	Player->CharacterInstance->SetColorParameterSelectedOption(TEXT("TeamColor2"), Team->SecondaryColor);
+	Player->CharacterInstance->SetColorParameterSelectedOption(TEXT("TeamColor3"), Team->TertiaryColor);
 
-	CustomObject->UpdateSkeletalMeshAsync(false, true);
+	Player->CharacterInstance->UpdateSkeletalMeshAsync(false, true);
 }
 
 void APlayerPawn::TickLockToFloor()

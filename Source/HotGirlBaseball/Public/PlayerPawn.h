@@ -7,7 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "MuCO/CustomizableSkeletalComponent.h"
-#include "HGBBPlayerStats.h"
+#include "HGBBPlayer.h"
 #include "HGBBTeam.h"
 #include "HGBBMovement.h"
 
@@ -21,7 +21,7 @@ class HOTGIRLBASEBALL_API APlayerPawn : public APawn
 public:
 	APlayerPawn();
 
-	void SetPlayerDisplay(TObjectPtr<UCustomizableObjectInstance> InCustomInstance, FHGBBTeam InTeam);
+	void SetPlayer(TWeakObjectPtr<UHGBBPlayer> Player, TWeakObjectPtr<UHGBBTeam> InTeam);
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UCapsuleComponent> Capsule;
@@ -74,9 +74,6 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UCustomizableSkeletalComponent> CustomBody;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TObjectPtr<UCustomizableObjectInstance> CustomObject;
-
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UHGBBMovement> MovementComponent;
 
@@ -84,7 +81,10 @@ public:
 	TObjectPtr<UFloatingPawnMovement> FloatingMovement;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	FHGBBTeam Team;
+	TWeakObjectPtr<UHGBBPlayer> Player;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TWeakObjectPtr<UHGBBTeam> Team;
 
 protected:
 	// Hair meshes will attach to a socket of this name on the Head mesh
