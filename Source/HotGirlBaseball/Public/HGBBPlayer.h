@@ -38,13 +38,13 @@ class UHGBBPlayer : public UObject
 public:
 	UHGBBPlayer() = default;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FText DisplayName;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<UCustomizableObjectInstance> CharacterInstance;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FHGBBPlayerStats Stats = {};
 };
 
