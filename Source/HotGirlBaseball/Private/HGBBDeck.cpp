@@ -29,7 +29,7 @@ TArray<UHGBBCard*> UBattingDeck::GetCards() const
 {
 	// Convert to parent Card class
 	TArray<UHGBBCard*> CardArray = {};
-	for (const auto Card : Cards)
+	for (const auto& Card : Cards)
 	{
 		CardArray.Add(Card);
 	}
@@ -61,7 +61,7 @@ TArray<UHGBBCard*> UFieldingDeck::GetCards() const
 {
 	// Convert to parent Card class
 	TArray<UHGBBCard*> CardArray = {};
-	for (const auto Card : Cards)
+	for (const auto& Card : Cards)
 	{
 		CardArray.Add(Card);
 	}
