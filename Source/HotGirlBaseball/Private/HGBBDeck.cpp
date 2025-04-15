@@ -25,6 +25,17 @@ void UBattingDeck::Shuffle()
 	Algo::RandomShuffle(Cards);
 }
 
+TArray<UHGBBCard*> UBattingDeck::GetCards() const
+{
+	// Convert to parent Card class
+	TArray<UHGBBCard*> CardArray = {};
+	for (const auto Card : Cards)
+	{
+		CardArray.Add(Card);
+	}
+	return CardArray;
+}
+
 void UFieldingDeck::InitFromPreset(const UFieldingDeckPreset& Preset)
 {
 	DisplayName = Preset.DisplayName;
@@ -44,4 +55,15 @@ void UFieldingDeck::InitFromPreset(const UFieldingDeckPreset& Preset)
 void UFieldingDeck::Shuffle()
 {
 	Algo::RandomShuffle(Cards);
+}
+
+TArray<UHGBBCard*> UFieldingDeck::GetCards() const
+{
+	// Convert to parent Card class
+	TArray<UHGBBCard*> CardArray = {};
+	for (const auto Card : Cards)
+	{
+		CardArray.Add(Card);
+	}
+	return CardArray;
 }

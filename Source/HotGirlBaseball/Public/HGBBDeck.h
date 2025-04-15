@@ -76,6 +76,9 @@ public:
 	UFUNCTION()
 	virtual void Shuffle() {};
 
+	UFUNCTION(BlueprintCallable)
+	virtual TArray<UHGBBCard*> GetCards() const { return {}; }
+
 	/** The user-facing name of this deck */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FText DisplayName;
@@ -98,6 +101,8 @@ public:
 
 	virtual void Shuffle() override;
 
+	virtual TArray<UHGBBCard*> GetCards() const override;
+
 	/** The collection of cards spawned and owned by this deck */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TArray<TObjectPtr<UBattingCard>> Cards;
@@ -115,6 +120,8 @@ public:
 	void InitFromPreset(const UFieldingDeckPreset& Preset);
 
 	virtual void Shuffle() override;
+
+	virtual TArray<UHGBBCard*> GetCards() const override;
 
 	/** The collection of cards spawned and owned by this deck */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
