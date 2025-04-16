@@ -22,7 +22,8 @@ public class HotGirlBaseball : ModuleRules
             "CustomizableObject", 
             "GameplayAbilities",
             "CommonLoadingScreen",
-            "CommonStartupLoadingScreen"
+            "CommonStartupLoadingScreen",
+            "Niagara"
         });
     }
 }
