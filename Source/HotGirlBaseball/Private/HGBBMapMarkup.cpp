@@ -33,6 +33,11 @@ AHGBBBaseMarker* AHGBBMapMarkup::GetMarkerForBase(EBase Base) const
 	return BaseMarkers[(int32)Base];
 }
 
+FVector AHGBBMapMarkup::GetBaseLocation(EBase Base) const
+{
+	return BaseMarkers[(int32)Base]->GetActorLocation();
+}
+
 AHGBBDugout* AHGBBMapMarkup::GetDugout(ETeamType Team) const
 {
 	return Team == ETeamType::Home ? HomeDugout : AwayDugout;

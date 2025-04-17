@@ -17,6 +17,11 @@ void AHGBBBaseMarker::SetGuardingPawn(AFieldingPawn* Pawn)
 	GuardingPawn = Pawn;
 }
 
+const AFieldingPawn* AHGBBBaseMarker::GetGuardingPawn() const
+{
+	return GuardingPawn.Get();
+}
+
 bool AHGBBBaseMarker::IsGuarded() const
 {
 	return GuardingPawn.IsValid();

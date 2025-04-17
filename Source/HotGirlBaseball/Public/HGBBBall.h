@@ -32,10 +32,70 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	//~ End IAbilitySystemInterface
 
+	// Some public debugging properties
+
+	UPROPERTY(BlueprintReadWrite)
+	bool DebugHitOverride = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	float DebugHorizontalAlpha = 0.0f;
+
+	UPROPERTY(BlueprintReadWrite)
+	float DebugVerticalAlpha = 0.0f;
+
+	UPROPERTY(BlueprintReadWrite)
+	float DebugHitPower = 0.0f;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool DebugPitchOverride = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool DebugPitchBallOrStrike = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool DebugPitchVariable = false;
+
+	UPROPERTY(BlueprintReadWrite)
+	float DebugPitchVariation = 0.0f;
+
+	UPROPERTY(BlueprintReadWrite)
+	float DebugPitchReleaseAlpha = 0.0f;
+
 protected:
 	virtual void BeginPlay() override;
 
 public:
+	/** Get whether or not the ball is currently live and in play */
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (BlueprintThreadSafe))
+	bool GetLive() const;
+
+	/** Get whether or not the ball has been hit by the batter */
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (BlueprintThreadSafe))
+	bool GetHit() const;
+
+	/** Get whether or not the ball should connect to the bat shortly */
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (BlueprintThreadSafe))
+	bool GetShouldHit() const;
+
+	/** Get the type of hit the batter made on the ball */
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (BlueprintThreadSafe))
+	FHitType GetHitType() const;
+
+	/** Get whether or not the ball can be considered a strike */
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (BlueprintThreadSafe))
+	bool GetStrike() const;
+
+	/** Get whether or not the ball has landed after being hit by the batter */
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (BlueprintThreadSafe))
+	bool GetHitLanded() const;
+
+	/** Get the expected landing point of the ball after being hit */
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (BlueprintThreadSafe))
+	FVector GetHitLandingLocation() const;
+
+	/** Overriding AActor::GetVelocity */
+	virtual FVector GetVelocity() const override;
+
 	/** Finish the current play and reset the ball */
 	UFUNCTION(BlueprintCallable)
 	void FinishPlay();
@@ -47,10 +107,10 @@ public:
 	/** Instruct the ball that it is being passed to a target location */
 	UFUNCTION(BlueprintCallable)
 	void Pass(const FVector& Target);
-	
-	/** When the ball has been acquired by a pawn this will be called to potentially call the current batter out */
+
+	/** Call when a fielder catches the ball and we need to attach to a point on the fielder */
 	UFUNCTION(BlueprintCallable)
-	void TryCatchOut2();
+	void FielderCatches(USceneComponent* AttachComponent, const FName& Socket);
 
 	/** Based on the given swing reponse time determine if the ball should contact the bat and if so the ball will redirect its velocity to make the impact more visibly consistant */
 	UFUNCTION(BlueprintCallable)
@@ -165,52 +225,44 @@ private:
 	// TODO: These state booleans could be merged into a state bitfield
 
 	/** Is the ball currently in a state where it *should* connect and result in a hit but hasn't yet */
-	bool bShouldHit;
+	bool bShouldHit = false;
 
 	/** Has the ball been hit by the batter yet */
-	bool bHit;
+	bool bHit = false;
 
 	/** Has the hit landed on the ground at least once */
-	bool bHitLanded;
+	bool bHitLanded = false;
 
 	/** Is the ball currently live and in play */
-	bool bLive;
+	bool bLive = false;
 
 	/** Has the ball contacted the strike zone yet during its travel */
-	bool bStrike;
+	bool bStrike = false;
 
 	/** Has the ball been marked foul */
-	bool bFoul;
+	bool bFoul = false;
 
 	/** Is the ball currently in a state where being caught would result in an out */
-	bool bCanCatchOut;
+	bool bCanCatchOut = false;
 
 	/** Is the ball currently in the air */
-	bool bInAir;
+	bool bInAir = false;
 
 	/** Launch velocity of the ball when it was last thrown */
-	FVector LaunchVelocity;
+	FVector LaunchVelocity = FVector::ZeroVector;
 
 	/** The expected landing point of the ball after being hit */
-	FVector TargetHitLocation;
+	FVector HitLandingLocation = FVector::ZeroVector;
 
 	/** The current target location that the ball is aiming to travel to */
-	FVector ThrowTarget;
+	FVector ThrowTarget = FVector::ZeroVector;
 
 	/** The time in seconds when the ball was last thrown */
-	double TimeThrown;
+	double TimeThrown = 0.0;
 
 	/** The estimated amount of time in seconds it will take for the ball to reach its current target from its starting point */
-	double TimeToTarget;
+	double TimeToTarget = 0.0;
 
 	/** Info about the direction and arc of the last time this ball was hit */
-	FHitType HitType;
-
-	bool DebugHitOverride;
-	float DebugHorizontalAlpha;
-	float DebugVerticalAlpha;
-	float DebugHitPower;
-
-	bool DebugPitchOverride;
-
+	FHitType HitType = {};
 };

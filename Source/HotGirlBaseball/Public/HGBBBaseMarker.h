@@ -25,6 +25,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetGuardingPawn(AFieldingPawn* Pawn);
 
+	UFUNCTION(BlueprintCallable)
+	const AFieldingPawn* GetGuardingPawn() const;
+
 	/** Get whether or not a pawn is currently guarding this base */
 	UFUNCTION(BlueprintCallable)
 	bool IsGuarded() const;

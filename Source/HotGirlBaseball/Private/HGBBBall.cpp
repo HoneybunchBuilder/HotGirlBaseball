@@ -50,6 +50,50 @@ void AHGBBBall::BeginPlay()
 	check(MapMarkup);
 }
 
+bool AHGBBBall::GetLive() const
+{
+	return bLive;
+}
+
+bool AHGBBBall::GetHit() const
+{
+	return bHit;
+}
+
+bool AHGBBBall::GetShouldHit() const
+{
+	return bShouldHit;
+}
+
+FHitType AHGBBBall::GetHitType() const
+{
+	return HitType;
+}
+
+bool AHGBBBall::GetStrike() const
+{
+	return bStrike;
+}
+
+bool AHGBBBall::GetHitLanded() const
+{
+	return bHitLanded;
+}
+
+FVector AHGBBBall::GetHitLandingLocation() const
+{
+	return HitLandingLocation;
+}
+
+FVector AHGBBBall::GetVelocity() const
+{
+	if (ProjectileMovement)
+	{
+		return ProjectileMovement->Velocity;
+	}
+	return FVector::ZeroVector;
+}
+
 void AHGBBBall::FinishPlay()
 {
 	// Hide the travel ribbon while the ball is not live
@@ -99,23 +143,31 @@ void AHGBBBall::Pass(const FVector& Target)
 	UE_VLOG_ARROW(this, LogTemp, Verbose, GetActorLocation(), Target, FColor::Yellow, TEXT("Pass Target"));
 }
 
-void AHGBBBall::TryCatchOut2()
+void AHGBBBall::FielderCatches(USceneComponent* AttachComponent, const FName& Socket)
 {
-	bInAir = false; // If we are evaluating a catch, we are not in the air
-	
-	if (!bCanCatchOut)
+	bInAir = false; // Not in the air if a fielder has caught the ball
+
+	// See if we are catching a runner out
+	if (bCanCatchOut && !bHitLanded)
 	{
-		return;
+		bCanCatchOut = false;
+		HitCaught.Broadcast();
 	}
 
-	bCanCatchOut = false;
+	// Given socket must exist
+	check(AttachComponent->DoesSocketExist(Socket));
 
-	if (bHitLanded)
-	{
-		return;
-	}
+	// Teleport the ball to the desired location first (Forget why we needed to do this tbh)
+	SetActorLocation(AttachComponent->GetSocketLocation(Socket), false, nullptr, ETeleportType::TeleportPhysics);
 
-	HitCaught.Broadcast();
+	// Attach the ball to the given attachment
+	AttachToComponent(AttachComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale, Socket);
+
+	// Make sure the mesh isn't offset all
+	Mesh->SetRelativeLocation(FVector::ZeroVector);
+
+	// Disable projectile movement so we don't move any more
+	ProjectileMovement->SetActive(false);
 }
 
 void AHGBBBall::DetermineAndRedirectHit2(float BatTimeToContactPoint)
@@ -419,17 +471,17 @@ void AHGBBBall::GenerateHit2(const FVector& HitPos)
 		check(false);
 	}
 
-	TargetHitLocation = PredictResult.LastTraceDestination.Location;
-	UE_VLOG_SPHERE(this, LogTemp, Verbose, TargetHitLocation, 25.0f, FColor::Purple, TEXT("Predicted Land"));
+	HitLandingLocation = PredictResult.LastTraceDestination.Location;
+	UE_VLOG_SPHERE(this, LogTemp, Verbose, HitLandingLocation, 25.0f, FColor::Purple, TEXT("Predicted Land"));
 	
 	EHitArc Arc = EHitArc::PopFly;
 	EHitDirection Direction = EHitDirection::Center;
 
-	if (MapMarkup->IsLocationFoul(TargetHitLocation))
+	if (MapMarkup->IsLocationFoul(HitLandingLocation))
 	{
 		Direction = EHitDirection::Foul;
 	}
-	else if(MapMarkup->IsLocationHomeRun(TargetHitLocation))
+	else if(MapMarkup->IsLocationHomeRun(HitLandingLocation))
 	{
 		Direction = EHitDirection::HomeRun;
 	}

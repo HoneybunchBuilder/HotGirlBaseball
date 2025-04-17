@@ -29,6 +29,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	AHGBBBaseMarker* GetMarkerForBase(EBase Base) const;
 
+	/** Retrieve the world location of the given base */
+	UFUNCTION(BlueprintCallable)
+	FVector GetBaseLocation(EBase Base) const;
+
 	/** Retrieve the Dugout actor for the given team type */
 	UFUNCTION(BlueprintCallable)
 	AHGBBDugout* GetDugout(ETeamType Team) const;
@@ -49,22 +53,23 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-private:
 	/** Closed spline that marks up what is considered the infield */
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<USplineComponent> Infield;
 
 	/** Closed spline that contains the entire playfield */
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<USplineComponent> Playfield;
 
 	/** A simple spline that defines the left foul line */
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<USplineComponent> LeftFoul;
 
 	/** A simple spline that defines the right foul line */
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<USplineComponent> RightFoul;
+
+private:
 
 	/** A list of every base marker; the index of the marker in the array should correspond with the integer value associated with EBase */
 	TArray<TObjectPtr<AHGBBBaseMarker>> BaseMarkers;
