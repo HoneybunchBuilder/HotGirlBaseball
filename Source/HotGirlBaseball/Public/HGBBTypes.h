@@ -14,6 +14,7 @@ enum class EBase : uint8 {
     Second = 2 UMETA(DisplayName = "Second"),
     Third = 3 UMETA(DisplayName = "Third"),
 };
+const static int32 NumBases = 4;
 
 /** The defensive positions on the baseball field */
 UENUM(BlueprintType)

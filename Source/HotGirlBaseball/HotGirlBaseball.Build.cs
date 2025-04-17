@@ -23,7 +23,8 @@ public class HotGirlBaseball : ModuleRules
             "GameplayAbilities",
             "CommonLoadingScreen",
             "CommonStartupLoadingScreen",
-            "Niagara"
+            "Niagara",
+            "MetasoundEngine"
         });
     }
 }

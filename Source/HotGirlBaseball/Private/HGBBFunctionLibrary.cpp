@@ -3,6 +3,33 @@
 
 #include "HGBBFunctionLibrary.h"
 
+#include "Components/SplineComponent.h"
+
+bool UHGBBFunctionLibrary::DoesSplineContainLocation(const USplineComponent* Spline, const FVector& Location)
+{
+	check(Spline);
+	const FVector ClosestToSpline = Spline->FindLocationClosestToWorldLocation(Location, ESplineCoordinateSpace::World);
+
+	const auto DiffToClosest = FVector2D(Location - ClosestToSpline).GetSafeNormal();
+	// HACK: We have to manually find the appropriate right vector
+	const auto Right = [Spline, Location, ClosestToSpline]() -> FVector2D {
+		const auto ClosestInputKey = Spline->FindInputKeyClosestToWorldLocation(Location);
+		const auto NextLocation = Spline->GetLocationAtSplineInputKey(ClosestInputKey + 0.1, ESplineCoordinateSpace::World);
+
+		const auto DirToNextLoc = (NextLocation - ClosestToSpline).GetSafeNormal();
+		const auto Right = FVector2D(FVector::CrossProduct(FVector::UpVector, DirToNextLoc));
+
+		return Right.GetSafeNormal();
+	}();
+
+	const auto Dot = FVector2D::DotProduct(DiffToClosest, Right);
+	return Dot >= 0.0f;
+}
+
+bool UHGBBFunctionLibrary::IsFloatInRange(float Value, float Min, float Max, bool InclusiveMin, bool InclusiveMax)
+{
+	return ((InclusiveMin ? (Value >= Min) : (Value > Min)) && (InclusiveMax ? (Value <= Max) : (Value < Max)));
+}
 
 UWidget* UHGBBFunctionLibrary::GetFocusedWidget()
 {
@@ -23,6 +50,23 @@ UWidget* UHGBBFunctionLibrary::GetFocusedWidget()
 	}
 
 	return nullptr;
+}
+
+double UHGBBFunctionLibrary::TimeProjectileToTarget(const FVector& Start, const FVector& End, const FVector& Velocity, float Gravity)
+{
+	// Need to solve a quadratic
+	// xa = (-b + sqrt(sq(b) - 4ac)) / 2a
+	// xb = (-b - sqrt(sq(b) - 4ac)) / 2a
+
+	const float QuadB = Velocity.Z;
+	const float QuadC = Start.Z - End.Z;
+	const float Quad2A = Gravity; // Gravity is expected to be in regular Unreal units (Centimeters)
+
+	const float QuadBSq = FMath::Square(QuadB);
+	const float Quad4AC = 2 * Quad2A * QuadC;
+
+	const float Time = (-QuadB + FMath::Sqrt(QuadBSq - Quad4AC)) / Quad2A;
+	return Time;
 }
 
 bool UHGBBFunctionLibrary::DoesPositionGuardBase(EFieldingPosition Position, EBase Base)
