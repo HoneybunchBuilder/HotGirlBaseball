@@ -6,7 +6,7 @@
 #include "Components/ArrowComponent.h"
 #include "Components/SphereComponent.h"
 
-#include "BattingPawn.h"
+#include "HGBBBatterInterface.h"
 
 AHGBBDugout::AHGBBDugout()
 {
@@ -50,8 +50,10 @@ void AHGBBDugout::ResetBatters(UPARAM(ref)TArray<APawn*>& Batters)
 	for (int32 BatterIndex = 0; BatterIndex < Batters.Num(); BatterIndex++)
 	{
 		auto& Batter = Batters[BatterIndex];
-		// TODO: Not yet
-		//Batter->OnReturnToDugout();
+		if (Batter->Implements<UHGBBBatterInterface>())
+		{
+			IHGBBBatterInterface::Execute_OnReturnToDugout(Batter);
+		}
 		
 		const auto& Spot = SpotMarkers[BatterIndex];
 		check(Spot); // Shouldn't be null but BP corruption is a hell of a drug
