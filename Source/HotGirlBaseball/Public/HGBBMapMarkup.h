@@ -29,6 +29,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	AHGBBBaseMarker* GetMarkerForBase(EBase Base) const;
 
+	/** Indicate to all base markers that the given pawn will no longer guard any of them */
+	UFUNCTION(BlueprintCallable)
+	void RemovePawnFromGuardDuty(const APawn* Pawn);
+
+	/** Get a list of all viable camera anchors */
+	UFUNCTION(BlueprintCallable)
+	const TArray<AHGBBCameraAnchor*>& GetCameraAnchors() const;
+
 	/** Retrieve the world location of the given base */
 	UFUNCTION(BlueprintCallable)
 	FVector GetBaseLocation(EBase Base) const;
@@ -87,5 +95,5 @@ private:
 	TObjectPtr<AHGBBBatterBox> BatterBoxLH;
 
 	/** A list of all available camera anchor points around the map */
-	TArray<AHGBBCameraAnchor> CameraAnchors;
+	TArray<TObjectPtr<AHGBBCameraAnchor>> CameraAnchors;
 };

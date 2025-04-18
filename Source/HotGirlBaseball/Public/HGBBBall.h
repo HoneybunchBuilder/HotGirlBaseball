@@ -166,7 +166,7 @@ private:
 	void ActivateThrowEffect2(float Alpha);
 
 	/** Generate a hit response based on the given contact point */
-	void GenerateHit2(const FVector& HitPos);
+	void GenerateHit(const FVector& HitPos);
 
 	/** The display mesh for the ball */
 	UPROPERTY(EditDefaultsOnly)

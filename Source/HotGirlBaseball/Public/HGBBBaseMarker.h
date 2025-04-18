@@ -4,8 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "FieldingPawn.h"
 #include "HGBBBaseMarker.generated.h"
+
+class APawn;
 
 /**
 	An actor that marks up a base that can be guarded by a fielder and must be reached by a runner as they round the field
@@ -23,10 +24,10 @@ public:
 
 	/** Specify which pawn is guarding this base. Provide nullptr to specify no pawn guards this base */
 	UFUNCTION(BlueprintCallable)
-	void SetGuardingPawn(AFieldingPawn* Pawn);
+	void SetGuardingPawn(APawn* Pawn);
 
 	UFUNCTION(BlueprintCallable)
-	const AFieldingPawn* GetGuardingPawn() const;
+	const APawn* GetGuardingPawn() const;
 
 	/** Get whether or not a pawn is currently guarding this base */
 	UFUNCTION(BlueprintCallable)
@@ -38,5 +39,5 @@ private:
 	EBase Base;
 
 	/** A pawn that might be guarding this base */
-	TWeakObjectPtr<AFieldingPawn> GuardingPawn;
+	TWeakObjectPtr<APawn> GuardingPawn;
 };

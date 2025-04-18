@@ -21,15 +21,19 @@ AHGBBBall::AHGBBBall()
 	RootComponent = Mesh;
 
 	PitchEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Pitch Effect"));
+	PitchEffect->bAutoActivate = false;
 	PitchEffect->SetupAttachment(Mesh);
 
 	TravelRibbon = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Travel Ribbon"));
+	TravelRibbon->SetVisibility(false);
 	TravelRibbon->SetupAttachment(Mesh);
 
 	HitEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Hit Effect"));
+	HitEffect->bAutoActivate = false;
 	HitEffect->SetupAttachment(Mesh);
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement"));
+	ProjectileMovement->bShouldBounce = true;
 
 	AbilityComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("Ability Component"));
 }
@@ -206,8 +210,9 @@ void AHGBBBall::DetermineAndRedirectHit2(float BatTimeToContactPoint)
 	const float TargetDeltaDifference = TargetDelta.Length();
 
 	// Bail if redirecting the ball would cause too large a change in trajectory
-	if (TargetDeltaDifference > 0.25f)
+	if (TargetDeltaDifference > 50.0f)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed Distance Test: %f"), TargetDeltaDifference);
 		return;
 	}
 
@@ -217,6 +222,7 @@ void AHGBBBall::DetermineAndRedirectHit2(float BatTimeToContactPoint)
 	// If the time isn't within the redirection threshold, we need to stop
 	if (!UHGBBFunctionLibrary::IsFloatInRange(TimeToNewTarget, TimeToNewTarget - RedirectTimingThreshold, TimeToNewTarget + RedirectTimingThreshold, true, true))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed Timing Test: %f %f %f"), TimeToTarget, TimeToNewTarget, RedirectTimingThreshold);
 		return;
 	}
 
@@ -243,7 +249,9 @@ void AHGBBBall::DetermineAndRedirectHit2(float BatTimeToContactPoint)
 	FVector NewVelocity = {};
 	UGameplayStatics::SuggestProjectileVelocity(ProjectileParams, NewVelocity);
 
+	UE_LOG(LogTemp, Warning, TEXT("Redirecting Ball"));
 	ProjectileMovement->Velocity = NewVelocity;
+	UE_LOG(LogTemp, Warning, TEXT("Ball Velocity: %s"), *ProjectileMovement->Velocity.ToString());
 
 	UE_VLOG_SPHERE(this, LogTemp, Verbose, NewTarget, 5.0f, FColor::Cyan, TEXT("Redirected Target"));
 	UE_VLOG_ARROW(this, LogTemp, Verbose, GetActorLocation(), GetActorLocation() + NewVelocity, FColor::Blue, TEXT("Redirected Velocity"));
@@ -265,10 +273,13 @@ void AHGBBBall::ThrowBallToLocation(const FVector& Target, float LaunchSpeed)
 		return;
 	}
 	ThrowTarget = Target;
+	TimeThrown = UGameplayStatics::GetRealTimeSeconds(this);
+	TimeToTarget = UHGBBFunctionLibrary::TimeProjectileToTarget(Start, ThrowTarget, LaunchVelocity, ProjectileMovement->GetGravityZ());
 
 	ProjectileMovement->Velocity = LaunchVelocity;
 	ProjectileMovement->SetUpdatedComponent(RootComponent); // Required for the projectile movement to launched multiple times
 	ProjectileMovement->SetActive(true);
+	UE_LOG(LogTemp, Warning, TEXT("Ball Velocity: %s"), *ProjectileMovement->Velocity.ToString());
 
 	// Play Sound effect
 	UGameplayStatics::PlaySoundAtLocation(this, ThrownSoundSource, Start);
@@ -286,6 +297,7 @@ void AHGBBBall::OnCollisionHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	// Nothing to do if ball isn't already live
 	if (!bLive)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Ball Ignoring Collision: Not Live"));
 		return;
 	}
 
@@ -295,16 +307,22 @@ void AHGBBBall::OnCollisionHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 		{
 			// Foul balls need to be marked as landed here
 			// Play will be finished up later
-			bHitLanded = true;
+			UE_LOG(LogTemp, Warning, TEXT("Ball Collision: Foul Ball"));
+			if (OtherActor != StrikeZone)
+			{
+				bHitLanded = true;
+			}
 		}
 		else
 		{
 			if (bHitLanded)
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Ball Collision: Hit Ground"));
 				BallHitsGround.Broadcast();
 			}
 			else
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Ball Collision: Hit Landed"));
 				bHitLanded = true;
 				HitLands.Broadcast();
 			}
@@ -314,6 +332,7 @@ void AHGBBBall::OnCollisionHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	{
 		// The batter missed and the catcher didn't intercept so we probably hit a wall or something
 		// TODO: Do we care about the catcher missing? In real baseball a runner could steal a base
+		UE_LOG(LogTemp, Warning, TEXT("Ball Resetting On Hit"));
 		FinishPlay();
 	}
 }
@@ -327,18 +346,21 @@ void AHGBBBall::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	// Nothing to do if ball isn't already live
 	if (!bLive)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Ball Ignoring Overlap: Not Live"));
 		return;
 	}
 
 	// Only care about interactions with the strike zone
 	if (Cast<AHGBBStrikeZone>(Other) == nullptr)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Ball Ignoring Overlap: Not Strike Zone"));
 		return;
 	}
 
 	// If the ball is already considered hit, we can also ignore this
 	if (bHit)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Ball Ignoring Overlap: Already Hit"));
 		return;
 	}
 
@@ -348,25 +370,29 @@ void AHGBBBall::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Othe
 		// If we overlap the strike zone, this ball should be marked as a strike
 		// It can still be hit but we want to record that the pitch, overall, was a strike
 		bStrike = true;
+		UE_LOG(LogTemp, Warning, TEXT("Ball Overlap: Strike"));
 		return;
 	}
 
 	// If we encountered anything other than the strike zone hit capsule we can bail
 	if (OtherComp != StrikeZone->GetHitCapsule())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Ball Ignoring Overlap: Not Hit Capsule"));
 		return;
 	}
 	
 	// If we already determined that the ball shouldn't register a hit (e.g. because the swing was too early or too late) we can bail
 	if (!bShouldHit)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Ball Ignoring Overlap: Shouldn't Hit"));
 		return;
 	}
 
 	// We're registering a hit! Play a sound to accompany this
 	UGameplayStatics::PlaySoundAtLocation(this, HitSoundSource, Mesh->GetComponentLocation());
 
-	GenerateHit2(SweepResult.ImpactPoint);
+	UE_LOG(LogTemp, Warning, TEXT("Generating hit!"));
+	GenerateHit(SweepResult.ImpactPoint);
 
 	bHit = true;
 	bCanCatchOut = true;
@@ -374,6 +400,7 @@ void AHGBBBall::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	// If the hit was a home run, start a timer to finish the play after a given amount of time
 	if (HitType.Direction == EHitDirection::HomeRun)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Home Run!"));
 		HomeRun.Broadcast();
 		// TODO: We want a bit more fanfare for a home run
 		FTimerHandle Handle = {};
@@ -386,6 +413,7 @@ void AHGBBBall::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	// If the hit was a foul, start a timer to finish the play after a small amount of time
 	if (HitType.Direction == EHitDirection::Foul)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Foul Ball!"));
 		FoulBall.Broadcast();
 		FTimerHandle Handle = {};
 		GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateLambda([this]() {
@@ -395,6 +423,7 @@ void AHGBBBall::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	}
 
 	// If this wasn't a home run or a foul we can just report the hit
+	UE_LOG(LogTemp, Warning, TEXT("Broadcasting hit!"));
 	PlayStateChanged.Broadcast(bHit);
 }
 
@@ -406,9 +435,11 @@ void AHGBBBall::ActivateThrowEffect2(float Alpha)
 	PitchEffect->SetVariableLinearColor(FName(TEXT("FeedbackColor")), Color);
 	PitchEffect->SetVisibility(true);
 	PitchEffect->Activate();
+
+	TravelRibbon->SetVisibility(true);
 }
 
-void AHGBBBall::GenerateHit2(const FVector& HitPos)
+void AHGBBBall::GenerateHit(const FVector& HitPos)
 {
 	const float HorizontalHitAlpha = [this]() -> float {
 		if (DebugHitOverride)
@@ -441,7 +472,7 @@ void AHGBBBall::GenerateHit2(const FVector& HitPos)
 	ProjectileMovement->Velocity = [this, HorizontalHitAlpha, VerticalHitAlpha, HitPower]() -> FVector {
 		const FVector Forward = FVector::ForwardVector;
 		
-		const auto VerticalDeg = FMath::GetMappedRangeValueClamped(FVector2D(-.25f, 1.0f), FVector2D(15.0, -100.0), HorizontalHitAlpha);
+		const auto VerticalDeg = FMath::GetMappedRangeValueClamped(FVector2D(-.25f, 1.0f), FVector2D(15.0, -100.0), VerticalHitAlpha);
 		const auto HorizontalDeg = FMath::GetMappedRangeValueClamped(FVector2D(-1.0f, 1.0f), FVector2D(-65.f, 65.f), HorizontalHitAlpha);
 
 		FVector Velocity = Forward.RotateAngleAxis(VerticalDeg, FVector::RightVector);
@@ -452,6 +483,7 @@ void AHGBBBall::GenerateHit2(const FVector& HitPos)
 
 		return Velocity;
 	}();
+	UE_LOG(LogTemp, Warning, TEXT("Ball Velocity: %s"), *ProjectileMovement->Velocity.ToString());
 
 	UE_VLOG_SPHERE(this, LogTemp, Verbose, HitPos, 3.0f, FColor::Purple, TEXT("Hit Location"));
 	UE_VLOG_ARROW(this, LogTemp, Verbose, HitPos, HitPos + ProjectileMovement->Velocity, FColor::Purple, TEXT("Hit Velocity"));
@@ -468,7 +500,7 @@ void AHGBBBall::GenerateHit2(const FVector& HitPos)
 	if (!UGameplayStatics::PredictProjectilePath(this, PredictParams, PredictResult))
 	{
 		// If we fail, we have problems
-		check(false);
+		//check(false);
 	}
 
 	HitLandingLocation = PredictResult.LastTraceDestination.Location;

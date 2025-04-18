@@ -39,7 +39,7 @@ ETeamType AHGBBDugout::GetTeamType() const
 	return TeamType;
 }
 
-void AHGBBDugout::ResetBatters(UPARAM(ref)TArray<ABattingPawn*>& Batters)
+void AHGBBDugout::ResetBatters(UPARAM(ref)TArray<APawn*>& Batters)
 {
 	// We can't handle more batters than we have spots
 	check(Batters.Num() <= Spots.Num());
@@ -50,7 +50,8 @@ void AHGBBDugout::ResetBatters(UPARAM(ref)TArray<ABattingPawn*>& Batters)
 	for (int32 BatterIndex = 0; BatterIndex < Batters.Num(); BatterIndex++)
 	{
 		auto& Batter = Batters[BatterIndex];
-		Batter->OnReturnToDugout();
+		// TODO: Not yet
+		//Batter->OnReturnToDugout();
 		
 		const auto& Spot = Spots[BatterIndex];
 		const auto& SpotTransform = Spot->GetComponentTransform();

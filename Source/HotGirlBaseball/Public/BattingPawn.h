@@ -4,12 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "PlayerPawn.h"
 #include "BattingPawn.generated.h"
 
 /** A Player controllable pawn responsible for batting and running bases */
 UCLASS()
-class HOTGIRLBASEBALL_API ABattingPawn : public APlayerPawn
+class HOTGIRLBASEBALL_API ABattingPawn : public APawn
 {
 	GENERATED_BODY()
 

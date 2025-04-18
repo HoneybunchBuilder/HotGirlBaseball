@@ -34,7 +34,7 @@ public:
 
 	/** Place the given batters in their appropriate positions */
 	UFUNCTION(BlueprintCallable)
-	void ResetBatters(UPARAM(ref) TArray<ABattingPawn*>& Batters);
+	void ResetBatters(UPARAM(ref) TArray<APawn*>& Batters);
 
 protected:
 	/** Indicates the overall forward facing direction of all the relevant spots for the dugout */

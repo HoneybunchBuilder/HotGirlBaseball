@@ -33,6 +33,23 @@ AHGBBBaseMarker* AHGBBMapMarkup::GetMarkerForBase(EBase Base) const
 	return BaseMarkers[(int32)Base];
 }
 
+void AHGBBMapMarkup::RemovePawnFromGuardDuty(const APawn* Pawn)
+{
+	for (const auto Base : BaseMarkers)
+	{
+		if (Base->GetGuardingPawn() == Pawn)
+		{
+			Base->SetGuardingPawn(nullptr);
+			return; // No pawn should ever be marked as guarding two bases at the same time so we can early out
+		}
+	}
+}
+
+const TArray<AHGBBCameraAnchor*>& AHGBBMapMarkup::GetCameraAnchors() const
+{
+	return CameraAnchors;
+}
+
 FVector AHGBBMapMarkup::GetBaseLocation(EBase Base) const
 {
 	return BaseMarkers[(int32)Base]->GetActorLocation();
@@ -122,4 +139,7 @@ void AHGBBMapMarkup::BeginPlay()
 			BatterBoxRH = BatterBox;
 		}
 	}
+
+	// Collect all camera anchors
+	CameraAnchors = UHGBBFunctionLibrary::GetAllActorsOfClass<AHGBBCameraAnchor>(this);
 }
