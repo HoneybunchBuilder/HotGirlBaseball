@@ -397,6 +397,8 @@ void AHGBBBall::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	bHit = true;
 	bCanCatchOut = true;
 
+	HitEffect->Activate(); // Play hit particle effect!
+
 	// If the hit was a home run, start a timer to finish the play after a given amount of time
 	if (HitType.Direction == EHitDirection::HomeRun)
 	{
