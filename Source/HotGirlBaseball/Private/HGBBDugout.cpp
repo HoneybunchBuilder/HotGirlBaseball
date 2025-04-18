@@ -17,15 +17,15 @@ AHGBBDugout::AHGBBDugout()
 
 	auto SpotName = FString(TEXT("SpotX")); // Reserve a name string that we can re-use in the loop
 	// Create a component for each possible spot in the dugout a batter can be sent to
-	Spots.Reserve(NumSpots);
+	SpotMarkers.Reserve(NumSpots);
 	for (int32 SpotIndex = 0; SpotIndex < NumSpots; SpotIndex++)
 	{
 		SpotName = FString::Printf(TEXT("Spot%d"), SpotIndex);
-		auto SpotComponent = CreateDefaultSubobject<USphereComponent>(*SpotName);
-		SpotComponent->SetRelativeLocation(FVector(SpotIndex * SpotSpacing));
+		auto SpotComponent = CreateDefaultSubobject<USphereComponent>(FName(*SpotName));
+		SpotComponent->SetRelativeLocation(FVector(SpotIndex * SpotSpacing, 0, 0));
 		SpotComponent->SetSphereRadius(32.0f);
 		SpotComponent->SetupAttachment(RootComponent);
-		Spots.Add(SpotComponent);
+		SpotMarkers.Add(SpotComponent);
 	}
 }
 
@@ -42,7 +42,7 @@ ETeamType AHGBBDugout::GetTeamType() const
 void AHGBBDugout::ResetBatters(UPARAM(ref)TArray<APawn*>& Batters)
 {
 	// We can't handle more batters than we have spots
-	check(Batters.Num() <= Spots.Num());
+	check(Batters.Num() <= SpotMarkers.Num());
 	/*
 		In the order provided, place each given batter at the Spot marker at the same index
 	*/
@@ -53,9 +53,10 @@ void AHGBBDugout::ResetBatters(UPARAM(ref)TArray<APawn*>& Batters)
 		// TODO: Not yet
 		//Batter->OnReturnToDugout();
 		
-		const auto& Spot = Spots[BatterIndex];
+		const auto& Spot = SpotMarkers[BatterIndex];
+		check(Spot); // Shouldn't be null but BP corruption is a hell of a drug
 		const auto& SpotTransform = Spot->GetComponentTransform();
-
+		
 		const auto TargetTransform = ForwardRelativeTransform * SpotTransform;
 		Batter->SetActorLocationAndRotation(TargetTransform.GetLocation(), TargetTransform.GetRotation());
 	}

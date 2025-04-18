@@ -47,14 +47,14 @@ protected:
 
 	/** The amount of space to leave between each spot marker */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	float SpotSpacing;
+	float SpotSpacing = 130.0f;
 
 	/** An array of all possible places to relocate a batter to */
-	UPROPERTY(BlueprintReadOnly)
-	TArray<USceneComponent*> Spots;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<USceneComponent*> SpotMarkers;
 
 	/** The details of the team this dugout is for */
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<UHGBBTeam> Team;
 
 private:
