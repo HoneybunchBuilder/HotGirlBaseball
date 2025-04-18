@@ -409,7 +409,6 @@ void AHGBBBall::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Othe
 		GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateLambda([this]() {
 			FinishPlay();
 		}), 3.0f, false);
-		return;
 	}
 
 	// If the hit was a foul, start a timer to finish the play after a small amount of time
@@ -421,10 +420,9 @@ void AHGBBBall::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Othe
 		GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateLambda([this]() {
 			FinishPlay();
 		}), 1.5f, false);
-		return;
+		return; // Don't need to report the hit in this case even though the ball did connect with a swing
 	}
 
-	// If this wasn't a home run or a foul we can just report the hit
 	UE_LOG(LogTemp, Warning, TEXT("Broadcasting hit!"));
 	PlayStateChanged.Broadcast(bHit);
 }
@@ -493,16 +491,18 @@ void AHGBBBall::GenerateHit(const FVector& HitPos)
 	FPredictProjectilePathParams PredictParams = {};
 	PredictParams.StartLocation = HitPos;
 	PredictParams.LaunchVelocity = ProjectileMovement->Velocity;
-	PredictParams.bTraceWithChannel = true;
+	PredictParams.bTraceWithCollision = true; // Trace against blocking, static geometry (The playfield)
 	PredictParams.bTraceComplex = true;
 	PredictParams.TraceChannel = ECollisionChannel::ECC_WorldStatic;
 	PredictParams.ActorsToIgnore.Add(this);
+	PredictParams.MaxSimTime = 60.0f; // Need a lot of sim time for these potential travels
 	PredictParams.OverrideGravityZ = ProjectileMovement->GetGravityZ();
 	FPredictProjectilePathResult PredictResult = {};
 	if (!UGameplayStatics::PredictProjectilePath(this, PredictParams, PredictResult))
 	{
 		// If we fail, we have problems
-		//check(false);
+		// Do we need more sim time?
+		check(false);
 	}
 
 	HitLandingLocation = PredictResult.LastTraceDestination.Location;
