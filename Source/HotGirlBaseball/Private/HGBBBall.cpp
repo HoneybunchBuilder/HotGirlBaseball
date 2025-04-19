@@ -110,6 +110,7 @@ void AHGBBBall::FinishPlay()
 	PlayFinished.Broadcast();
 
 	// Reset these here so that they can be inspected by anything that listened to PlayFinished
+	bHit = false;
 	bCanCatchOut = false;
 	bLive = false;
 	bShouldHit = false;
@@ -174,7 +175,7 @@ void AHGBBBall::FielderCatches(USceneComponent* AttachComponent, const FName& So
 	ProjectileMovement->SetActive(false);
 }
 
-void AHGBBBall::DetermineAndRedirectHit2(float BatTimeToContactPoint)
+void AHGBBBall::DetermineAndRedirectHit(float BatTimeToContactPoint)
 {
 	if (!bLive)
 	{
@@ -210,7 +211,7 @@ void AHGBBBall::DetermineAndRedirectHit2(float BatTimeToContactPoint)
 	const float TargetDeltaDifference = TargetDelta.Length();
 
 	// Bail if redirecting the ball would cause too large a change in trajectory
-	if (TargetDeltaDifference > 50.0f)
+	if (TargetDeltaDifference > RedirectDistanceThreshold)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed Distance Test: %f"), TargetDeltaDifference);
 		return;
@@ -320,7 +321,7 @@ void AHGBBBall::OnCollisionHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 				UE_LOG(LogTemp, Warning, TEXT("Ball Collision: Hit Ground"));
 				BallHitsGround.Broadcast();
 			}
-			else
+			else if(OtherActor != StrikeZone)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Ball Collision: Hit Landed"));
 				bHitLanded = true;
@@ -403,10 +404,11 @@ void AHGBBBall::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	if (HitType.Direction == EHitDirection::HomeRun)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Home Run!"));
-		HomeRun.Broadcast();
 		// TODO: We want a bit more fanfare for a home run
 		FTimerHandle Handle = {};
 		GetWorldTimerManager().SetTimer(Handle, FTimerDelegate::CreateLambda([this]() {
+			// Broadcast the home run event here so that we give the batter time to run a bit and be considered a runner
+			HomeRun.Broadcast();
 			FinishPlay();
 		}), 3.0f, false);
 	}

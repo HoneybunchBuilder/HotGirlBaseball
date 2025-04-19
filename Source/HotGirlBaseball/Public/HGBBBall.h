@@ -114,7 +114,7 @@ public:
 
 	/** Based on the given swing reponse time determine if the ball should contact the bat and if so the ball will redirect its velocity to make the impact more visibly consistant */
 	UFUNCTION(BlueprintCallable)
-	void DetermineAndRedirectHit2(float BatTimeToContactPoint);
+	void DetermineAndRedirectHit(float BatTimeToContactPoint);
 
 	/** Broadcasts when the play has resolved and FinishPlay has been called */
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayFinished);
@@ -199,6 +199,10 @@ private:
 	/** The sound source to use when the ball is hit */
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UMetaSoundSource> HitSoundSource;
+
+	/** Maximum distance that hit redirection will allow between existing pitch target and location to facilitate a hit */
+	UPROPERTY(EditDefaultsOnly)
+	float RedirectDistanceThreshold = 10.0f;
 
 	/** Timing threshold for ball to be redirected to new target when batter swings */
 	UPROPERTY(EditDefaultsOnly)
