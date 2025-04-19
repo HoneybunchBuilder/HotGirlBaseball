@@ -35,7 +35,7 @@ AHGBBBaseMarker* AHGBBMapMarkup::GetMarkerForBase(EBase Base) const
 
 void AHGBBMapMarkup::RemovePawnFromGuardDuty(const APawn* Pawn)
 {
-	for (const auto Base : BaseMarkers)
+	for (const auto& Base : BaseMarkers)
 	{
 		if (Base->GetGuardingPawn() == Pawn)
 		{
