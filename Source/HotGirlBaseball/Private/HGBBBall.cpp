@@ -4,7 +4,7 @@
 #include "HGBBBall.h"
 
 #include "AbilitySystemComponent.h"
-#include "MetaSoundsource.h"
+#include "MetasoundSource.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "VisualLogger/VisualLogger.h"
